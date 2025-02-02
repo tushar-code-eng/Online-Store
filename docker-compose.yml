@@ -1,0 +1,60 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres_container
+    restart: always  # ✅ This is correctly placed
+    environment:
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: mydatabase
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U myuser"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis
+    container_name: redis_container
+    restart: always  # ✅ This is correct
+    ports:
+      - "6379:6379"
+
+  serverless-redis-http:
+    image: hiett/serverless-redis-http:latest
+    container_name: serverless_redis_http
+    restart: always
+    ports:
+      - "8079:80"
+    environment:
+      SRH_MODE: env
+      SRH_TOKEN: example_token
+      SRH_CONNECTION_STRING: "redis://redis:6379"
+    depends_on:
+      - redis
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: app_container
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy  # ✅ Ensures DB is ready before app starts
+      redis:
+        condition: service_started
+    env_file:
+      - .env
+    entrypoint: ["/bin/sh", "-c", "npx prisma migrate deploy && npm start"]
+
+volumes:
+  postgres_data:
