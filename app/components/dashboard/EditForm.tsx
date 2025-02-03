@@ -32,17 +32,17 @@ import { createProduct, editProduct } from "@/app/actions";
 import { useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod";
 import { productSchema } from "@/app/lib/zodSchemas";
-import { type $Enums } from "@prisma/client";
+// import { type $Enums } from "@prisma/client";
 
 interface iAppProps {
   data: {
     id: string;
     name: string;
     description: string;
-    status: $Enums.ProductStatus;
+    status: any;
     price: number;
     images: string[];
-    category: $Enums.Category;
+    category: any;
     isFeatured: boolean;
   };
 }

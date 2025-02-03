@@ -1,12 +1,11 @@
-version: "3.8"
 
 services:
   postgres:
     image: postgres:15
-    container_name: postgres_container
+    container_name: postgres
     restart: always  # ✅ This is correctly placed
     environment:
-      POSTGRES_USER: myuser
+      POSTGRES_USER: mydatabase
       POSTGRES_PASSWORD: mypassword
       POSTGRES_DB: mydatabase
     ports:
@@ -40,9 +39,7 @@ services:
       - redis
 
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: tushar0505/shoemarshal:v1
     container_name: app_container
     restart: always
     ports:

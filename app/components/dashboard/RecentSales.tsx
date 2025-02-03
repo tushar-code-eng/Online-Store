@@ -32,7 +32,7 @@ export async function RecentSales() {
         <CardTitle>Recent sales</CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col gap-8">
-        {data.map((item) => (
+        {data.map((item:any) => (
           <div className="flex items-center gap-4" key={item.id}>
             <Avatar className="hidden sm:flex h-9 w-9">
               <AvatarImage src={item.User?.profileImage} alt="Avatar Image" />
