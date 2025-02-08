@@ -38,20 +38,20 @@ services:
     depends_on:
       - redis
 
-  app:
-    image: tushar0505/shoemarshal:v1
-    container_name: app_container
-    restart: always
-    ports:
-      - "3000:3000"
-    depends_on:
-      postgres:
-        condition: service_healthy  # ✅ Ensures DB is ready before app starts
-      redis:
-        condition: service_started
-    env_file:
-      - .env
-    entrypoint: ["/bin/sh", "-c", "npx prisma migrate deploy && npm start"]
+  # app:
+  #   image: tushar0505/shoemarshal:v1
+  #   container_name: app_container
+  #   restart: always
+  #   ports:
+  #     - "3000:3000"
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy  # ✅ Ensures DB is ready before app starts
+  #     redis:
+  #       condition: service_started
+  #   env_file:
+  #     - .env
+  #   entrypoint: ["/bin/sh", "-c", "npx prisma migrate deploy && npm start"]
 
 volumes:
   postgres_data:
